@@ -79,8 +79,8 @@
 </div>
 
 <div class="panel" id="screen-lobby" hidden>
-  <h1>You're in</h1>
-  <div class="sub">Waiting for the host to start…</div>
+  <h1 id="lobby-title">You're in</h1>
+  <div class="sub" id="lobby-sub">Waiting for the host to start…</div>
   <div class="spin"></div>
   <div class="pill" id="lobby-count">—</div>
 </div>
@@ -184,6 +184,11 @@ async function join() {
   }
 }
 
+// Has a word been shown yet? Changes the waiting copy from "we haven't started"
+// to "that turn is over" — the same screen means different things before the
+// first word and between turns.
+let hasPlayed = false;
+
 function watch(code) {
   onValue(ref(db, 'rooms/' + code), (snap) => {
     if (!snap.exists()) { show('over'); return; }
@@ -192,11 +197,18 @@ function watch(code) {
     $('lobby-count').textContent = count === 1 ? '1 player in' : count + ' players in';
 
     if (room.state === 'playing' && room.word) {
+      hasPlayed = true;
       $('word').textContent = room.word;
       show('word');
     } else if (room.state === 'ended') {
       show('over');
     } else {
+      // Between turns the host blanks the word, so nobody is left acting one
+      // that is no longer live.
+      if (hasPlayed) {
+        $('lobby-title').textContent = 'Turn over';
+        $('lobby-sub').textContent = 'Hold tight — the next word is coming…';
+      }
       show('lobby');
     }
   }, () => show('over'));
