@@ -137,6 +137,12 @@ const params = new URLSearchParams(location.search);
 if (params.get('c')) $('code').value = params.get('c').toUpperCase().slice(0, 4);
 try { $('name').value = localStorage.getItem('cc-player-name') || ''; } catch {}
 
+// Select the remembered name on focus. Without this, tapping a prefilled field
+// puts the caret wherever you touched and typing splices into the middle —
+// "Dave" + "Priya" became "DaPriyave" in testing. A returning player should be
+// able to tap once and overwrite.
+$('name').addEventListener('focus', function () { this.select(); });
+
 $('go').addEventListener('click', join);
 $('name').addEventListener('keydown', (e) => { if (e.key === 'Enter') join(); });
 
