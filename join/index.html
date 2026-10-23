@@ -94,7 +94,15 @@
 <div class="panel" id="screen-over" hidden>
   <h1>Game over</h1>
   <div class="sub">Thanks for playing.</div>
-  <a class="cta" href="https://play.google.com/store/apps/details?id=com.charadesparty.app">
+  <!--
+    The referrer parameter is the whole point of this link. Play Console
+    attributes installs by install referrer, so this is the ONLY way to measure
+    whether multiplayer actually converts the people it reaches — four players
+    in a room who never installed the app is the entire premise, and without
+    this tag an install from here is indistinguishable from organic search.
+    Shows up under Acquisition reports -> Play Store install referrer.
+  -->
+  <a class="cta" href="https://play.google.com/store/apps/details?id=com.charadesparty.app&amp;referrer=utm_source%3Djoin_page%26utm_medium%3Dmultiplayer%26utm_campaign%3Droom_invite">
     Get Charades Champ free →
   </a>
 </div>
